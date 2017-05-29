@@ -1,0 +1,514 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Author: Ragnhild C. Noven
+
+%% Inspired by https://tex.stackexchange.com/questions/8827/preparing-cheat-sheets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt]{article}
+\usepackage{multirow,multicol,makecell}
+
+\usepackage[a4paper,margin=0.55in,landscape]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{color,graphicx,overpic}
+\usepackage{hyperref}
+\usepackage{enumitem,kantlipsum}
+
+%% NB: important that this comes first, otherwise get option clash
+\usepackage[table]{xcolor}
+
+% Turn off header and footer
+\pagestyle{empty}
+
+% Redefine section commands to use less space
+\makeatletter
+%\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+%                                {-1ex plus -.5ex minus -.2ex}%
+%                                {0.5ex plus .2ex}%
+%                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+% For custom table columns
+\usepackage{array}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+%My Environments
+\newtheorem{example}[section]{Example}
+
+%-----------------------------------------------------------------------
+
+\usepackage{listings,bookmark}
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,
+    frame=single,
+    keepspaces=true,                 
+    numbers=none,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    columns=fullflexible
+  }
+ 
+\lstset{style=mystyle}
+
+
+%%%%%%%%%%%%% Make sections have coloured background %%%%%%%%%%%%%%%
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage{titlesec}
+
+
+\titleformat{\section}{\large \bfseries}{}{2em}{\colorsection}
+\titleformat{name=\section,numberless}{\large \bfseries}{}{0em}{\colorsectionnonumber}
+
+%\titlespacing{<command>}{<left>}{<before-sep>}{<after-sep>}
+\titlespacing{\section}{-4px}{0.5em}{1em}
+
+% NB: crucial to use \columnwidth and not \textwidth
+\newcommand{\colorsection}[1]{%
+\colorbox{lightgray}{\parbox{\dimexpr\columnwidth-2\fboxsep-2\fboxrule\relax}{\thesection\ #1}}}
+
+\newcommand{\colorsectionnonumber}[1]{%
+\colorbox{lightgray}{\parbox{\dimexpr\columnwidth-2\fboxsep-2\fboxrule\relax}{#1}}}
+
+
+% NB: raggedright is important here
+\titleformat{\subsection}{\large \raggedright \bfseries}{}{0em}{}
+
+\setlength{\columnsep}{18pt}
+%------------------------------------------------------------------------------------------------------------------------
+
+
+\begin{document}
+
+\centering
+
+{\scshape\huge \bfseries Python for data science} \\[4pt]
+{\large Ragnhild C.~Noven}
+
+\vspace{6pt}
+
+\raggedright
+\footnotesize
+\begin{multicols*}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{30pt}
+\setlength{\columnsep}{2pt}
+
+\section{Basic imports}
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+import numpy as np 
+import scipy as sp 
+\end{lstlisting}
+
+\section{Navigation}
+\vspace{2pt}
+\begin{minipage}{0.95\linewidth}
+  \centering
+\begin{lstlisting}[language=Python]
+import os     
+os.getcwd()
+\end{lstlisting}
+\end{minipage}
+
+
+\section{Input and output}
+
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+  
+\item \textbf{Read} lines from file
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+import sys
+with open(sys.argv[1]) as f:
+    flines = f.readlines() 
+for line in flines: 
+    print line 
+\end{lstlisting}
+
+\item \textbf{Write} to file
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+with open('filename.txt','w') as f:
+    f.write(mystr)
+\end{lstlisting}
+\end{itemize}
+
+
+
+\section{Lists}
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+\item \textbf{Merge} a list into another using \verb+mylist.extend(taillist)+ to 
+\end{itemize}
+
+
+\section{Dictionaries}
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+
+\item Iterate over key,value pairs in dictionary
+  \vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+[func(key,value) for key,value in dict.iteritems()]
+[func(key,value) for key,value in zip(dict.keys(),dict.values())]
+\end{lstlisting}
+
+  \item Get the value at key, and if key is not in dictionary, insert it with a default value:
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+mydict.setdefault(key,defval)
+\end{lstlisting}
+\end{itemize}
+
+\section{Strings}
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+\item Basic functions:
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+>>> "%s is %.2f" % ("Foo",3.567)
+'Foo is 3.57'
+str.count(substr)
+separator.join(iterable)
+>>> 'Py' in 'Python'
+True
+# returns -1 if not found
+str.find(substr)
+str.replace(old,new)
+str.split(sepstr)
+str.strip(schars)
+
+str.startswith("substr")
+\end{lstlisting}
+  
+\end{itemize}
+
+\section{Unicode}
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+\item Unicode looks like \verb+\u2119+, has integers that uniquely represent symbols.
+\item The conversion from unicode to bytes can be done by different \textit{encodings}, such as 'ascii', 'utf8', 'windows-1252' etc. 
+\item \verb+unicode.encode -> bytes+
+\item \verb+bytes.decode -> unicode+
+\item If you have a unicode string and get errors, try using \verb+'xmlcharrefreplace'+ as the second argument to \verb+encode+. 
+\end{itemize}
+
+See \url{https://nedbatchelder.com/text/unipain.html}
+
+\section{Objects}
+\begin{itemize}
+\item \textbf{Introspection}: use \verb+dir()+ or \verb+type()+.
+\end{itemize}
+
+\section{Don't ask permission}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+try:
+    do_something(x)
+except Exception, e:
+    print e
+\end{lstlisting}
+
+\section{Operators}
+% \begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+    \rowcolors{2}{gray!25}{white}
+\begin{tabular}{>{\ttfamily \large}l>{\ttfamily}l}
+  \hline
+  \multicolumn{1}{l}{Operator} & \multicolumn{1}{l}{Meaning} \\
+\hline
+& and, or, not, in \\
+** &  Exponent \\
+\%  &  Modulus  \\
+!= &  Not equal  \\
+\&  &  Bitwise AND  \\	
+\verb+|+  &  Bitwise OR  \\	
+\verb+~+  &  Bitwise NOT  \\	
+\verb+^+  &  Bitwise XOR  \\
+\hline
+\end{tabular}  
+%\end{lstlisting}
+  
+\section{Graphs}
+
+\subsection{Basic graphs}
+Start with importing the pyplot package
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+import matplotlib.pyplot as plt
+\end{lstlisting}
+Then you can use
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+##create empty plot 
+plt.subplot(1,1,1)
+plt.plot([1,2,3])
+plt.show()
+##NB: clear plot 
+plt.close()
+\end{lstlisting}
+to plot lists.
+
+\subsection{Barplot}
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+plot = plt.subplot()
+b2 = plot.bar([1,2,3],[4,5,6],color='g',width=0.5)
+b1 = plot.bar([0.5,1.5,2.5],[1,2,3],width=0.5)
+plt.show()
+\end{lstlisting}
+
+\subsection{Histogram}
+Let \verb+mydict+ be a dictionary of counts. 
+\vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+pos = np.arange(len(mydict))
+plt.bar(pos, [x[1] for x in mydict.iteritems()])
+plt.xticks(pos, [x[0] for x in mydict.iteritems()])
+plt.show()
+\end{lstlisting}
+
+\subsection{Multiple plots}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+fig = plt.figure()
+
+f1 = fig.add_subplot(221)
+data.hist(bins=25,color='navy',ax=f1)
+f1.set_title('Histogram')
+f1.set_xlabel('Xlabel')
+
+f2 = fig.add_subplot(222)
+f3 = fig.add_subplot(223)
+f4 = fig.add_subplot(224)
+\end{lstlisting}
+
+
+\section{Modules}
+
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+\item \textbf{Each module has its own namespace}. So if we do \verb+import mymod+, then we can use items in mymod via \verb+mymod.modfunc()+. It is possible to import all items from a module directly via \verb+from mymod import *+, but this can lead to name mangling, and should be used with care.   
+    
+\item Any file ``myfile.py'' is a \textbf{module}, and can be imported by using \verb+import myfile+.
+
+\item Can add code that is only called when the module is run as a main \textbf{script} (as \verb~python module.py~):
+  \vspace{2pt}
+\begin{lstlisting}[linewidth=0.95\linewidth]
+if __name__ == "__main__":
+    some_code_here
+\end{lstlisting}
+
+\item Import a module from an \textbf{absolute path}:
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+import sys
+import os
+sys.path.append(os.path.expanduser('~') + "/path/to/file")
+\end{lstlisting}
+
+\item Import a module from a \textbf{relative path}:
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+  from ..pkg import module
+\end{lstlisting}
+imports module.py in the folder pkg, where pkg is in the parent directory of the current location. 
+
+\item \textbf{NB:} if the \verb~__init__.py~ file is not present, then can't import module files from other folders, solution is to add this file (it may be left empty).
+
+  \section{Packages}
+  
+\item A \textbf{package} is a directory with a collection of modules (files), plus an  \verb+__init__.py+ file. Packages can be used in two ways, either write
+  \vspace{2pt}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+import mypackage
+mypackage.module.function()
+\end{lstlisting}
+where module corresponds to a file module.py, or use
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+from mypackage import module
+module.function()
+\end{lstlisting}
+
+\end{itemize}
+
+\section{Pandas}
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+  \item Basic functions for data frames
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+import pandas as pd
+df=pd.read_csv("myfile.csv", header=None, sep=";",names=["first",'c2']))
+# toy dataframe
+df = pd.DataFrame({"c1": [1,2,3,4], "c2": [1,1,2,2]})
+df.shape
+df.columns
+df.dtypes
+df.describe()
+df.head(10)
+\end{lstlisting}
+
+ \item Filtering data frames
+
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]    
+# indexing
+df.ix[0,1]
+# extract columns
+df[["c1"]]
+df.filter(items=["c1","c2"])
+# extract rows 
+df.filter(items = [2,3],axis=0)
+# select elements
+df[df.c1 < 5]
+df.query("c1 > 4")\end{lstlisting}
+
+So to get the fourth row, can do either \verb+df.ix[3,:]+ or \verb+ users.filter(items=[3],axis=0)+. 
+
+\item For data series, can do
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+series[series>3].index
+series.sort_values(ascending=True)
+\end{lstlisting}
+  
+\item Missing data: \verb+df[df.c1.isnull()]+, can do \verb+df = df[df.c1.notnull()]+.  
+
+\item Data summaries
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+df.c1.hist(bins=20)
+plt.show()  
+\end{lstlisting}
+
+\section{Split, apply, combine in Pandas}
+
+\end{itemize}
+
+\section{Grammar of data}
+    \rowcolors{2}{gray!25}{white}
+\vspace{1pt}
+\begin{tabular}{>{\ttfamily}l>{\ttfamily}l>{\ttfamily}l>{\ttfamily}l}
+  \hline
+  \multicolumn{1}{l}{\textbf{Verb}} &  \multicolumn{1}{l}{\textbf{Pandas}} & \multicolumn{1}{l}{ \textbf{SQL}} \\
+  \hline
+  Query & query() & SELECT WHERE \\
+  Sort &  sort() & ORDER BY \\
+  Projection & [[]] & SELECT COLUMN \\
+  \multirow{2}{*}{\begin{minipage}{0.2\columnwidth}{Select-\\ distinct } \end{minipage} } & unique() & \multirow{2}{*}{\begin{minipage}{0.3\columnwidth}{SELECT DISTINCT  \\ COLUMN} \end{minipage} }\\[10pt]
+  Assign & assign & ALTER/UPDATE \\
+  Aggregate &\multirow{2}{*}{\begin{minipage}{0.3\columnwidth}{describe(),  \\ mean(), max() } \end{minipage} } & \multirow{2}{*}{\begin{minipage}{0.3\columnwidth}{COUNT(),AVG(),\\MAX(), SUM() } \end{minipage} } \\[10pt]
+  Sample & sample() & RAND() \\
+  Group-agg & agg,count,mean & GROUP BY \\
+  DELETE & drop & DELETE/WHERE
+\end{tabular}
+
+\vspace{5pt}
+
+\section{Numpy arrays }
+
+\begin{itemize}[wide = 4pt, labelindent=\parindent]
+\item Create an array using \verb+array([])+. You always need a list directly within \verb+array()+. For example \verb+array([[1,2],[3,4]])+ creates a matrix with rows equal to the inner lists. 
+\item Create an array of zeros with a given size: \verb+zeros((n1,n2))+. 
+\item Array with elements of different lengths, do \verb+array([[0,1],[1]],object)+, which creates a different type of array. 
+\item Operations: 
+  \begin{itemize}
+  \item Use \verb+dot(a,b)+ for any type of matrix multiplication, note that vectors do not distinguish between row/column versions. 
+  \item Use \verb+add(a,b)+ for adding arrays \textit{elementwise} and \verb+subtract(a,b)+ for subtracting elementwise. 
+  \item Note that these operations will work on lists, but they will output an array, so try to work consistently with arrays within a function. 
+  \end{itemize}
+\item Converting from arrays:
+  \begin{itemize}
+  \item Use \verb+list()+ to convert an array to a list. A matrix will become a list of arrays containing the rows. 
+  \item Use \verb+float()+ to convert an array of length 1 to a floating-point number.  
+  \end{itemize}
+\item Pitfalls:
+  \begin{itemize}
+  \item Printing an array just returns the vector/matrix/\ldots as a list, so something could be an array but look like a list. 
+  \end{itemize}
+\end{itemize}
+
+\section{Pickle}
+Saving objects, useful for dataframes etc.
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+# Save object
+import cPickle
+with open('pfile.pkl','wb') as f:
+    cPickle.dump(object,f)
+
+# Read saved object
+with open('pfile.pkl','r') as f:
+    object = cPickle.load(f)
+\end{lstlisting}
+
+\section{Timing}
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+import time
+start = time.time()
+print("hello")
+end = time.time()
+print(end - start)
+\end{lstlisting}
+
+
+
+\section{Regexp in Python}
+
+\begin{lstlisting}[language=Python,linewidth=0.95\linewidth]
+## replace parts of a string
+nstr = re.sub(pattern, replacement, str, max=0)
+\end{lstlisting}
+
+\rowcolors{2}{gray!25}{white}
+\begin{tabular}{>{\ttfamily \large}l>{\ttfamily}l}
+  \hline
+  \multicolumn{1}{l}{Pattern} & \multicolumn{1}{l}{Matches} \\
+\hline
+\verb+^+	      & Beginning of line \\
+\verb+$+	& End of line \\
+.	& Exactly one character \\
+\verb+[...]+	& Any one character in the brackets \\
+\verb+[^...]+	& Any one character \textit{not} in brackets\\
+x*	& 0 or more times x\\
+x+	& 1 or more times x\\
+x?	& 0 or 1 times x\\
+\verb+\w+	& Word characters\\
+\verb+\W+	& Nonword characters\\
+\verb+\s+	& Whitespace  \\
+\verb+\d+	& Digits. Equivalent to [0-9] \\
+\end{tabular}    
+
+
+\end{multicols*}
+
+\end{document}
